@@ -1,37 +1,37 @@
 import React from 'react';
 import {useState} from "react";
-
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, NavLink } from 'react-router-dom';
 
 import logo from './logo.svg';
 import './App.css';
 
-import Card from "./components/Card.js";
+import teamdata from "./teamdata.js";
+
+import TeamMembersList from "./components/TeamMembersList.js";
 import Form from "./components/Form.js";
 
 function App() {
 
-  const [people, setPeople] = useState([{name: "Tisha", email: "email", role: "student"}]);
+  //add the data imported from teamdata.js to state
+  const [teamMembersList, setTeamMembersList] = useState(teamdata);  
 
-  const addPerson = person => {
-    setPeople ([...people, person]);
+  //function to add a new team member
+  const addTeamMember = (teamMember) => {
+    setTeamMembersList ([...teamMembersList, teamMember]);
   }
 
-  
+    
 
   return (
     <div className="App">
 
-    <Link to = "/">Home</Link>
-    <Link to = "/add">Add Person</Link>
+    <ul className="navbar">
+      <li><NavLink exact to = "/" activeClassName="activeNavButton">Team Members</NavLink></li>
+      <li><NavLink to = "/form" activeClassName="activeNavButton">Add Team Member</NavLink> </li>
+    </ul>  
 
-    <Route path = "/add" render = {props => <Form {...props} submitPerson = {addPerson} /> } />
-    
-
-    <Route exact path = "/" render = {props => people.map (person => <Card person = {person} />)} />
-    
-
-    
+    <Route exact path = "/" render = {props => <TeamMembersList {...props} teamMembersList = {teamMembersList} />} />   
+    <Route path = "/form" render = {props => <Form {...props} addTeamMember = {addTeamMember} /> } />      
       
     </div>
   );

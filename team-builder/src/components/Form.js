@@ -1,40 +1,52 @@
 import React from "react";
 import {useState} from "react";
 
-import { Route } from 'react-router-dom';
-
 
 function Form (props) {
 
-    //this is the same as writing const setPeople = props.setPeople
-    const { submitPerson } = props;
+    const [teamMember, setTeamMember] = useState({name: "", email: "", role: ""});
 
-    const [person, setPerson] = useState({name: "", email: "@email", role: ""});
+    const changeHandler = event => {
 
-    const handleChange = event => {
-        setPerson ({...person, [event.target.name]: event.target.value});
+        //computed properties
+        setTeamMember ({...teamMember, [event.target.name]: event.target.value});
     }
 
-    const handleSubmit = event => {
+    const submitForm = event => {
         event.preventDefault();
-        submitPerson(person);        
-        setPerson({name: "", email: "@email", role: ""});
+        const newTeamMember = {
+            ...teamMember,
+            id: Date.now()
+        };
+
+        props.addTeamMember(newTeamMember);
+        setTeamMember({name: "", email: "@email", role: ""});
     }
 
     return (
 
-        <form onSubmit = {handleSubmit}>
-            {/*the spread operator copies an old object into a new object
-               (...person) copies all the person object's old keys and values (name, email, and role), specifying name
-               to the right sets a new value for name. when we specify a new value for name, the new object is 
-               going to take the right most value for that key*/}
-            <input placeholder = "name" value = {person.name} name = "name" onChange = {handleChange}/>
-            <input placeholder = "email" value = {person.email} name = "email" onChange = {handleChange} />
-            <input placeholder = "role" value = {person.role} name = "role" onChange = {handleChange}/>
+        <div className = "contact-div">
 
-            <button type = "submit"> Add Person </button>
+            <h1>New Team Member Form</h1>
 
-        </form>
+            <form onSubmit = {submitForm}>
+                {/*the spread operator copies an old object into a new object
+                (...person) copies all the person object's old keys and values (name, email, and role), specifying name
+                to the right sets a new value for name. when we specify a new value for name, the new object is 
+                going to take the right most value for that key*/}
+                
+                
+                <input placeholder = "name" value = {teamMember.name} name = "name" onChange = {changeHandler}/>
+                
+                <input placeholder = "email" value = {teamMember.email} name = "email" onChange = {changeHandler} />
+                            
+                <input placeholder = "role" value = {teamMember.role} name = "role" onChange = {changeHandler}/>
+                
+                <button type = "submit"> Add Person </button>
+
+            </form>
+
+        </div>
 
 
     );
